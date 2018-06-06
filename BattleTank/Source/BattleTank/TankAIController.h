@@ -2,11 +2,12 @@
 
 #pragma once
 
+#include "BattleTank.h"
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "Tank.h"
 #include "TankAIController.generated.h"
 
+class ATank;
 /**
  * 
  */
@@ -18,6 +19,7 @@ class BATTLETANK_API ATankAIController : public AAIController
 public:
 
 	void BeginPlay() override;
+	void Tick(float DeltaTime) override;
 
 private:
 
