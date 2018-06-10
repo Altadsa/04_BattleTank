@@ -36,6 +36,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = Firing)
 	float LaunchSpeed = 10000.0f;
 
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ReloadTimeInSeconds = 3.0f;
+
 protected:
 
 	UTankAimingComponent * TankAimingComponent = nullptr;
@@ -51,4 +54,5 @@ protected:
 
 	UTankBarrel* Barrel = nullptr;
 	
+	double LastFireTime = 0;
 };
