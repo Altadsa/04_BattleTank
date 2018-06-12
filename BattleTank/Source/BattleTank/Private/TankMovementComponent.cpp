@@ -1,19 +1,41 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Public/TankMovementComponent.h"
+#include "Public/TankTrack.h"
 
-UTankMovementComponent::UTankMovementComponent()
+void UTankMovementComponent::Initialise(UTankTrack * LeftTrackToSet, UTankTrack * RightTrackToSet)
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	LeftTrack = LeftTrackToSet;
+	RightTrack = RightTrackToSet;
+}
 
-	// ...
+void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)
+{
+	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
+	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
+	
+	auto ForwardThrow = FVector::DotProduct(AIForwardIntention, TankForward);
+	IntendMoveForward(ForwardThrow);
+
+	auto RightThrow = FVector::CrossProduct(TankForward, AIForwardIntention).Z;
+	IntendTurnRight(RightThrow);
+
+	//UE_LOG(LogTemp, Warning, TEXT("%s moving at velocity: %s"), *TankName, *MoveVelocity.ToString())
 }
 
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Intend Move forward throw: %f"), Throw);
+	if (!RightTrack || !LeftTrack) { return; }
+
+	RightTrack->SetThrottleRequest(Throw);
+	LeftTrack->SetThrottleRequest(Throw);
 }
 
+void UTankMovementComponent::IntendTurnRight(float Throw)
+{
+	if (!RightTrack || !LeftTrack) { return; }
+
+	RightTrack->SetThrottleRequest(Throw);
+	LeftTrack->SetThrottleRequest(-Throw);
+}
 

@@ -3,6 +3,7 @@
 #include "TankAIController.h"
 #include "BattleTank.h"
 #include "Tank.h"
+#include "Public/TankMovementComponent.h"
 #include "Engine/World.h"
 
 void ATankAIController::BeginPlay()
@@ -21,8 +22,7 @@ void ATankAIController::Tick(float DeltaTime)
 	if (PlayerTank)
 	{
 		//TODO Move towards Player
-
-		//Aim towards the Player
+		MoveToActor(PlayerTank, AcceptanceRadius);
 
 		ControlledTank->AimAt(PlayerTank->GetActorLocation());
 

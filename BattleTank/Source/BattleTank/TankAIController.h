@@ -8,6 +8,7 @@
 #include "TankAIController.generated.h"
 
 class ATank;
+class UTankMovementComponent;
 /**
  * 
  */
@@ -22,5 +23,8 @@ public:
 	void Tick(float DeltaTime) override;
 
 private:
+
+	//How close the AI Tank can get to the Player
+	float AcceptanceRadius = 3000.0f;
 	
 };

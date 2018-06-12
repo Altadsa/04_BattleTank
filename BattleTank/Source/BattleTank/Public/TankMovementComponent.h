@@ -6,8 +6,11 @@
 #include "GameFramework/NavMovementComponent.h"
 #include "TankMovementComponent.generated.h"
 
+class UTankTrack;
+
+
 /**
- * 
+ * Responsible for Driving the Tank Tracks
  */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankMovementComponent : public UNavMovementComponent
@@ -16,11 +19,21 @@ class BATTLETANK_API UTankMovementComponent : public UNavMovementComponent
 	
 public:
 
-	UFUNCTION(BlueprintCallable, Category=Input)
+	UFUNCTION(BlueprintCallable, Category="Input")
 	void IntendMoveForward(float Throw);
-	
+
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void IntendTurnRight(float Throw);
+
+	UFUNCTION(BlueprintCallable, Category="Setup")
+	void Initialise(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);
+
 private:
 
-	UTankMovementComponent();
+	//Called from the pathfinding logic by the AI Controllers
+	void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
+	
+	UTankTrack* LeftTrack = nullptr;
+	UTankTrack* RightTrack = nullptr;
 
 };
