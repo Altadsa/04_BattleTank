@@ -5,13 +5,12 @@
 #include "Public/TankBarrel.h"
 #include "Public/Projectile.h"
 #include "Public/TankAimingComponent.h"
-#include "Public/TankMovementComponent.h"
 
 void ATank::Fire()
 {
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 
-	if (Barrel && isReloaded) {
+	if (ensure(Barrel && isReloaded)) {
 
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBlueprint,
@@ -35,13 +34,13 @@ ATank::ATank()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	auto TankName = GetName();
-	UE_LOG(LogTemp, Warning, TEXT("DONKEY: %s"), *TankName);
+	//auto TankName = GetName();
+	//UE_LOG(LogTemp, Warning, TEXT("DONKEY: %s"), *TankName);
 }
 
 void ATank::AimAt(FVector HitLocation)
 {
-	if (!TankAimingComponent) { return; }
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
