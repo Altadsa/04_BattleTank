@@ -4,13 +4,14 @@
 #include "Engine/World.h"
 #include "Public/TankBarrel.h"
 #include "Public/Projectile.h"
-#include "Public/TankAimingComponent.h"
 
 void ATank::Fire()
 {
+	if (!ensure(Barrel)) { return; }
+
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 
-	if (ensure(Barrel && isReloaded)) {
+	if (isReloaded) {
 
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBlueprint,
@@ -38,9 +39,4 @@ ATank::ATank()
 	//UE_LOG(LogTemp, Warning, TEXT("DONKEY: %s"), *TankName);
 }
 
-void ATank::AimAt(FVector HitLocation)
-{
-	if (!ensure(TankAimingComponent)) { return; }
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
-}
 
