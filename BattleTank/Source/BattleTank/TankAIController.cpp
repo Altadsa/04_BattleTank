@@ -20,14 +20,15 @@ void ATankAIController::Tick(float DeltaTime)
 
 	if (!ensure(PlayerTank && ControlledTank)) { return; }
 	
-	//TODO Move towards Player
+	//Get the Player's Location and move towards them
 	MoveToActor(PlayerTank, AcceptanceRadius);
 
+	//Aim the Tank's Barrel at the Player
 	auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
 	AimingComponent->AimAt(PlayerTank->GetActorLocation());
 
-	//TODO Fix Firing Method
-	//ControlledTank->Fire();
+	//Fire at the Player
+	AimingComponent->Fire();
 	
 }
 
